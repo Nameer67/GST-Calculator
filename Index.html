@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GST Late Fee Calculator India 2026</title>
+    <meta name="description" content="Calculate GST Late Fee and Interest instantly.">
+    <meta name="theme-color" content="#4f46e5">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --result-bg: #3b38e6; /* Deep Blue from image */
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --whatsapp: #16a34a;
+            --radius: 12px;
+        }
+
+        .dark-mode {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --result-bg: #1e1b4b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 20px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 15px;
+        }
+
+        /* --- TOP CARD (INPUTS) --- */
+        .input-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Special Button: "Aaj file karoge..." */
+        .btn-special {
+            width: 100%;
+            background: #f5f3ff;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin: 10px 0;
+            transition: background 0.2s;
+        }
+        .btn-special:hover { background: #ede9fe; }
+
+        /* Info Bar */
+        .info-bar {
+            background: #eff6ff;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #1e40af;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .dark-mode .info-bar { background: #1e3a8a; color: #bfdbfe; }
+
+        /* --- BOTTOM CARD (RESULTS) --- */
+        .result-card {
+            background: var(--result-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(59, 56, 230, 0.3);
+            position: relative;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .header-actions { display: flex; gap: 8px; }
+        
+        .icon-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Result Grid */
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-box {
+            background: white;
+            color: var(--text-main);
+            border-radius: 10px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .stat-value.red { color: var(--danger); }
+
+        .stat-sub {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            color: var(--text-muted);
+        }
+
+        /* Warning Text inside boxes */
+        .box-warning {
+            color: var(--danger);
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 6px;
+            line-height: 1.3;
+            display: none; /* Hidden by default */
+        }
+
+        /* Tax Liability Box */
+        .tax-box {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .tax-box .stat-label { color: rgba(255,255,255,0.8); }
+        .tax-box .stat-value { color: white; }
+
+        /* Total Payable Section */
+        .total-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            color: var(--danger);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .total-amount {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--danger);
+            text-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+            line-height: 1;
+        }
+        
+        .total-sub {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* Bottom Warning Bar */
+        .bottom-warning {
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fcd34d;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            display: none;
+        }
+
+        /* --- ACTION BAR (Bottom) --- */
+        .action-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .btn-wa {
+            background-color: var(--whatsapp);
+        }
+
+        .btn-pdf {
+            background-color: white;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        .btn-pdf svg { stroke: var(--danger); }
+
+        /* Responsive Tweaks */
+        @media (max-width: 380px) {
+            .total-amount { font-size: 2rem; }
+            .stat-value { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- TOP CARD: INPUTS -->
+        <div class="input-card">
+            <div class="form-group">
+                <label>Return Type</label>
+                <select id="returnType" onchange="calculate()">
+                    <option value="3B">GSTR-3B (Monthly/Quarterly)</option>
+                    <option value="1">GSTR-1</option>
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label>Filing Due Date</label>
+                    <input type="date" id="dueDate" onchange="calculate()">
+                </div>
+                <div class="form-group">
+                    <label>Actual Filing Date</label>
+                    <input type="date" id="fileDate" onchange="calculate()">
+                </div>
+            </div>
+
+            <button class="btn-special" onclick="setToday()">
+                <span>⚡</span> Aaj file karoge toh kitna lagega
+            </button>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label>Tax Liability (₹)</label>
+                    <input type="number" id="taxAmount" placeholder="0" inputmode="decimal" oninput="calculate()">
+                </div>
+                <div class="form-group">
+                    <label>Turnover Category</label>
+                    <select id="turnover" onchange="calculate()">
+                        <option value="below">Below ₹5 Cr</option>
+                        <option value="above">Above ₹5 Cr</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="info-bar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>As per GST rules (18% p.a.)</span>
+                <span style="opacity:0.5; margin-left:5px;">| Calculation is based on standard rules.</span>
+            </div>
+        </div>
+
+        <!-- BOTTOM CARD: RESULTS -->
+        <div class="result-card">
+            <div class="result-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Estimated Payable
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="copyResult()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy
+                    </button>
+                    <button class="icon-btn" onclick="shareResult()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        Share
+                    </button>
+                </div>
+            </div>
+
+            <div class="result-grid">
+                <!-- Box 1: Delay Days -->
+                <div class="stat-box">
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        Delay Days
+                    </div>
+                    <div class="stat-value" id="resDays">0</div>
+                    <div class="stat-sub">days</div>
+                    <div class="box-warning" id="boxWarningDays">
+                        ⚠️ <span id="warnTextDays"></span>
+                    </div>
+                </div>
+
+                <!-- Box 2: Late Fee -->
+                <div class="stat-box">
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>
+                        Late Fee (Total)
+                    </div>
+                    <div class="stat-value" id="resFee">₹0</div>
+                    <div class="stat-sub">
+                        CGST: <span id="resCgst">0</span> | SGST: <span id="resSgst">0</span>
+                    </div>
+                </div>
+
+                <!-- Box 3: Interest -->
+                <div class="stat-box">
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Interest (18%)
+                    </div>
+                    <div class="stat-value red" id="resInterest">₹0</div>
+                    <div class="stat-sub">💸 Interest har din badh raha hai!</div>
+                </div>
+
+                <!-- Box 4: Tax Liability -->
+                <div class="stat-box tax-box">
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        Tax Liability
+                    </div>
+                    <div class="stat-value" id="resTaxLiability">₹0</div>
+                </div>
+            </div>
+
+            <!-- Total Payable -->
+            <div class="total-section">
+                <div>
+                    <div class="total-label">Total Payable</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="total-amount" id="resTotalBig">₹0</div>
+                    <span class="total-sub">(Late Fee + Interest)</span>
+                </div>
+            </div>
+
+            <!-- Bottom Warning -->
+            <div class="bottom-warning" id="mainWarning">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                Warning: Delay is more than 30 days. Interest accumulation is significant.
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-bar">
+            <a href="https://wa.me/917088075694?text=Hi%20I%20checked%20my%20GST%20late%20fee%20on%20your%20calculator" target="_blank" class="action-btn btn-wa">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                Any Query on WhatsApp<br><span style="font-size:0.8em; font-weight:400; opacity:0.9">7088075694</span>
+            </a>
+            <button onclick="window.print()" class="action-btn btn-pdf">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                Download PDF<br><span style="font-size:0.8em; font-weight:400; opacity:0.9">Save / Share / Print</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const today = new Date();
+            document.getElementById('fileDate').valueAsDate = today;
+            const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 20);
+            document.getElementById('dueDate').valueAsDate = prevMonth;
+            calculate();
+        };
+
+        function setToday() {
+            const today = new Date();
+            document.getElementById('fileDate').valueAsDate = today;
+            calculate();
+        }
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function calculate() {
+            const returnType = document.getElementById('returnType').value;
+            const dueDateVal = document.getElementById('dueDate').value;
+            const fileDateVal = document.getElementById('fileDate').value;
+            let taxAmount = parseFloat(document.getElementById('taxAmount').value) || 0;
+            
+            if (!dueDateVal || !fileDateVal) return;
+
+            const due = new Date(dueDateVal);
+            const file = new Date(fileDateVal);
+            
+            const diffTime = file - due;
+            let delayDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            if (delayDays < 0) delayDays = 0;
+
+            let dailyFee = 0;
+            let isNilReturn = (taxAmount === 0);
+
+            if (returnType === '3B') {
+                dailyFee = isNilReturn ? 20 : 50;
+            } else if (returnType === '1') {
+                dailyFee = 200;
+            }
+
+            let totalLateFee = dailyFee * delayDays;
+            if (totalLateFee > 10000) totalLateFee = 10000;
+
+            let cgstFee = totalLateFee / 2;
+            let sgstFee = totalLateFee / 2;
+
+            let interestAmount = 0;
+            if (taxAmount > 0 && delayDays > 0) {
+                interestAmount = (taxAmount * 0.18 * delayDays) / 365;
+            }
+
+            const totalPayable = totalLateFee + interestAmount;
+
+            // UI Updates
+            document.getElementById('resDays').innerText = delayDays;
+            document.getElementById('resFee').innerText = formatCurrency(totalLateFee);
+            document.getElementById('resInterest').innerText = formatCurrency(interestAmount);
+            document.getElementById('resTaxLiability').innerText = formatCurrency(taxAmount);
+            document.getElementById('resTotalBig').innerText = formatCurrency(totalPayable);
+            
+            document.getElementById('resCgst').innerText = formatCurrency(cgstFee).replace('₹','');
+            document.getElementById('resSgst').innerText = formatCurrency(sgstFee).replace('₹','');
+
+            // Warning Logic
+            const boxWarning = document.getElementById('boxWarningDays');
+            const warnText = document.getElementById('warnTextDays');
+            const mainWarning = document.getElementById('mainWarning');
+
+            if (delayDays > 0) {
+                boxWarning.style.display = 'block';
+                warnText.innerText = `${delayDays} din delay ho chuka hai — aaj file nahi kiya toh penalty aur badhegi!`;
+            } else {
+                boxWarning.style.display = 'none';
+            }
+
+            if (delayDays > 30) {
+                mainWarning.style.display = 'flex';
+            } else {
+                mainWarning.style.display = 'none';
+            }
+        }
+
+        function copyResult() {
+            const total = document.getElementById('resTotalBig').innerText;
+            const days = document.getElementById('resDays').innerText;
+            const text = `GST Late Fee Estimate:\nDelay: ${days} days\nTotal Payable: ${total}\n(Note: This is an estimate)`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Result copied to clipboard!");
+            });
+        }
+
+        function shareResult() {
+            if (navigator.share) {
+                const total = document.getElementById('resTotalBig').innerText;
+                navigator.share({
+                    title: 'GST Late Fee Estimate',
+                    text: `Your estimated GST payable is ${total}. Check details on the calculator.`,
+                    url: window.location.href,
+                });
+            } else {
+                copyResult();
+            }
+        }
+    </script>
+</body>
+</html>
